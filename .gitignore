@@ -1,0 +1,3 @@
+node_modules
+logs 
+# we don't want to send the logs to github
