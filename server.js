@@ -31,7 +31,9 @@ app.use(cookieParser()) // this is third party middleware you're adding.
 
 app.use('/', express.static(path.join(__dirname, 'public'))) //this is built-in middleware telling server where to find static files like CSS, images, blah blah. 
 
-app.use('/', require('./routes/root')) //
+app.use('/', require('./routes/root')) 
+
+app.use('/users', require('./routes/userRoutes'))
 
 //The app.all() function is used to route all types of HTTP requests. Like if we have POST, GET, PUT, DELETE, etc, requests made to any specific route. 
 
