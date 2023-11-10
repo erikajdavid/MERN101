@@ -1,3 +1,5 @@
+require('dotenv').config() // this allows us to use dot throughout the whole pacakge
+
 const express = require('express') //INITIAL SETUP
 const app = express() //INITIAL SETUP
 
@@ -7,6 +9,13 @@ const errorHandler = require('./middleware/errorHandler')
 const cookieParser = require('cookie-parser')
 const corsOptions = require('./config/corsOptions')
 const cors = require('cors')
+const connectDB = require('./config/dbConn')
+const mongoose = require('mongoose')
+const { logEvents } = require('./middleware/logger')
+
+console.log(process.env.NODE_ENV);
+
+connectDB()
 
 const PORT = process.env.PORT || 3500 //what port we are running on in dev and when we deploy //INITIAL SETUP
 
@@ -39,6 +48,14 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler)
 
-app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`)
-}) //INITIAL SETUP
+mongoose.connection.once('open', () => {
+    console.log('Connected to MongoDB')
+    app.listen(PORT, () => {
+        console.log(`Server running on ${PORT}`)
+    }) //INITIAL SETUP
+})
+
+mongoose.connection.on('error', err => {
+    console.log(err)
+    logEvents(`${err.code}\t${err.syscall}\t${err.hostname}`, 'mongoErrLog.log')
+})
