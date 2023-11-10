@@ -1,23 +1,30 @@
-const express = require('express')
-const app = express()
+const express = require('express') //INITIAL SETUP
+const app = express() //INITIAL SETUP
+
 const path = require('path')
 const { logger } = require('./middleware/logger')
 const errorHandler = require('./middleware/errorHandler')
 const cookieParser = require('cookie-parser')
+const corsOptions = require('./config/corsOptions')
 const cors = require('cors')
-const PORT = process.env.PORT || 3500
+
+const PORT = process.env.PORT || 3500 //what port we are running on in dev and when we deploy //INITIAL SETUP
+
+//The app. use() function is used to mount the specified middleware function(s) at the path which is being specified. It is mostly used to set up middleware for your application.
 
 app.use(logger)
 
-app.use(cors())
+app.use(cors(corsOptions))
 
 app.use(express.json()) // this will allow app to parse and receive json data
 
 app.use(cookieParser()) // this is third party middleware you're adding.
 
-app.use('/', express.static(path.join(__dirname, 'public'))) //this is built-in middleware telling server where to find static files like CSS
+app.use('/', express.static(path.join(__dirname, 'public'))) //this is built-in middleware telling server where to find static files like CSS, images, blah blah. 
 
-app.use('/', require('./routes/root'))
+app.use('/', require('./routes/root')) //
+
+//The app.all() function is used to route all types of HTTP requests. Like if we have POST, GET, PUT, DELETE, etc, requests made to any specific route. 
 
 app.all('*', (req, res) => {
     res.status(404)
@@ -34,4 +41,4 @@ app.use(errorHandler)
 
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`)
-})
+}) //INITIAL SETUP

@@ -2,7 +2,7 @@
   "name": "mernproject",
   "version": "1.0.0",
   "description": "techNotes MERN project",
-  "main": "server.js",
+  "main": "server.js", 
   "scripts": {
     "start": "node server",
     "dev": "nodemon server"
